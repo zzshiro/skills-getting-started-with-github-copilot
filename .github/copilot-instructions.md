@@ -10,7 +10,7 @@ The Mergington High School Activities API is a simple FastAPI web application th
 - Python 3.12+ is required (check with `python --version`)
 - Install dependencies: `pip install -r requirements.txt`
   - Installs: fastapi, uvicorn
-  - NEVER CANCEL: Installation takes 30-60 seconds. Set timeout to 300+ seconds.
+  - NEVER CANCEL: Installation takes 15-30 seconds. Set timeout to 300+ seconds.
 
 ### Running the Application
 - Start the server: `python -m uvicorn src.app:app --reload --host 0.0.0.0 --port 8000`
@@ -24,6 +24,8 @@ The Mergington High School Activities API is a simple FastAPI web application th
 #### API Testing
 - Test activities endpoint: `curl -s http://localhost:8000/activities | python -m json.tool`
 - Test signup endpoint: `curl -s -X POST "http://localhost:8000/activities/Chess%20Club/signup?email=test@mergington.edu"`
+- Test error handling: `curl -s -X POST "http://localhost:8000/activities/Invalid%20Activity/signup?email=test@mergington.edu"` (should return 404)
+- Test duplicate signup: Try signing up the same email twice (should return 400)
 - View API documentation: http://localhost:8000/docs (interactive Swagger UI)
 - Alternative docs: http://localhost:8000/redoc
 
@@ -133,15 +135,16 @@ LICENSE               # MIT license
 - Uses uvicorn module with `src.app:app` and `--reload` flag
 
 ### Dev Container
-- Python 3.13 development container configured
+- Python 3.13 development container configured (devcontainer uses Python 3.13, but 3.12+ is sufficient)
 - Auto-installs requirements.txt on container creation
 - Port 8000 forwarded automatically
 - GitHub Copilot extension pre-installed
 
 ## Critical Reminders
-- **NEVER CANCEL** dependency installation - allow full 300+ seconds
+- **NEVER CANCEL** dependency installation - allow full 300+ seconds (typically completes in 15-30 seconds)
 - **ALWAYS** manually test both API endpoints and web interface after changes
 - **NO BUILD PROCESS** exists - application runs directly with uvicorn
 - **NO AUTOMATED TESTS** - rely on manual validation
 - Data persists only during server runtime - restarts reset all data
 - Use browser developer tools to check for JavaScript errors in web interface
+- **ALWAYS** test error scenarios: invalid activity names, duplicate signups, malformed requests
