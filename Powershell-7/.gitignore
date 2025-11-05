@@ -1,0 +1,68 @@
+# PowerShell-specific .gitignore
+
+# Build and output directories
+bin/
+obj/
+out/
+publish/
+
+# PowerShell module build artifacts
+*.psm1.log
+*.psd1.log
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# PowerShell specific
+*.ps1xml
+profile.ps1
+
+# Package management
+packages/
+*.nupkg
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Documentation build artifacts
+docs/_build/
+help/
