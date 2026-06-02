@@ -52,20 +52,35 @@ def get_activities():
     return activities
 
 
+def perform_signup(activity_name: str, email: str) -> str:
+    """Core signup logic shared between FastAPI and MCP interfaces.
+
+    Returns the success message on success.
+    Raises KeyError if the activity does not exist.
+    Raises ValueError if the student is already signed up or the activity is full.
+    """
+    if activity_name not in activities:
+        raise KeyError(f"Activity '{activity_name}' not found")
+
+    activity = activities[activity_name]
+
+    if email in activity["participants"]:
+        raise ValueError(f"Student {email} is already signed up for {activity_name}")
+
+    if len(activity["participants"]) >= activity["max_participants"]:
+        raise ValueError(f"Activity '{activity_name}' is full")
+
+    activity["participants"].append(email)
+    return f"Signed up {email} for {activity_name}"
+
+
 @app.post("/activities/{activity_name}/signup")
 def signup_for_activity(activity_name: str, email: str):
     """Sign up a student for an activity"""
-    # Validate activity exists
-    if activity_name not in activities:
-        raise HTTPException(status_code=404, detail="Activity not found")
-
-    # Get the specific activity
-    activity = activities[activity_name]
-
-    # Validate student is not already signed up
-    if email in activity["participants"]:
-        raise HTTPException(status_code=400, detail="Student is already signed up")
-
-    # Add student
-    activity["participants"].append(email)
-    return {"message": f"Signed up {email} for {activity_name}"}
+    try:
+        message = perform_signup(activity_name, email)
+        return {"message": message}
+    except KeyError as e:
+        raise HTTPException(status_code=404, detail=e.args[0])
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=e.args[0])
